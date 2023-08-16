@@ -38,6 +38,8 @@ ASYN=$(SUPPORT)/asyn-R4-36
 BUSY=$(SUPPORT)/busy-R1-7-2
 CALC=$(SUPPORT)/calc-R3-7-3
 
+ADSUPPORT=$(SUPPORT)/areaDetector-R3-7/ADSupport/
+XML2=$(ADSUPPORT)
 
 # EPICS_BASE usually appears last so other apps can override stuff:
 #EPICS_BASE=/usr/lib/epics
