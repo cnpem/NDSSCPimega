@@ -15,7 +15,7 @@ DBD += NDPluginWarp.dbd
 # headers are not considered public
 
 # Add all the support libraries needed by this IOC
-NDPluginWarp_LIBS += NDPlugin ADBase asyn
+NDPluginWarp_LIBS += NDPlugin ADBase asyn xml2
 
 NDPluginWarp_SRCS += NDPluginWarp.cpp
 
