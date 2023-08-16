@@ -29,11 +29,15 @@ TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top
 #CAPUTLOG=$(EPICS_BASE)
 #RECSYNC=$(EPICS_BASE)
 
+EPICS_BASE=/usr/local/epics/base
+SUPPORT=/usr/local/epics/synApps/support
+
 # required
-#ADCORE=$(EPICS_BASE)
-#ASYN=$(EPICS_BASE)
-#BUSY=$(EPICS_BASE)
-#CALC=$(EPICS_BASE)
+ADCORE=$(SUPPORT)/areaDetector-R3-7/ADCore
+ASYN=$(SUPPORT)/asyn-R4-36
+BUSY=$(SUPPORT)/busy-R1-7-2
+CALC=$(SUPPORT)/calc-R3-7-3
+
 
 # EPICS_BASE usually appears last so other apps can override stuff:
 #EPICS_BASE=/usr/lib/epics
