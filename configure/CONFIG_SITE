@@ -35,9 +35,6 @@ CHECK_RELEASE = YES
 #HOST_OPT = NO
 #CROSS_OPT = NO
 
-# Set to YES to build only the NDPluginWarp library
-#SKIP_APP=NO
-
 ## To extend the search path used by pkg-config
 ## add directories with .pc files.
 #export PKG_CONFIG_PATH=/user/davidsav/aravis/build/usr/lib/pkgconfig/
