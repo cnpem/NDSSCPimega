@@ -14,7 +14,7 @@
 #include <iocsh.h>
 #include <epicsExport.h>
 
-#include <NDPluginWarp.h>
+#include <NDPluginSSCPimega.h>
 
 NDPluginSSCPimega::NDPluginSSCPimega(const char *portName, int queueSize, int blockingCallbacks,
              const char *NDArrayPort, int NDArrayAddr,

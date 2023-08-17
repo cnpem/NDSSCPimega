@@ -8,19 +8,19 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC application
 
-LIBRARY += NDPluginWarp
+LIBRARY += NDPluginSSCPimega
 
-DBD += NDPluginWarp.dbd
+DBD += NDPluginSSCPimega.dbd
 
 # headers are not considered public
 
 # Add all the support libraries needed by this IOC
-NDPluginWarp_LIBS += NDPlugin ADBase asyn xml2
+NDPluginSSCPimega_LIBS += NDPlugin ADBase asyn xml2
 
-NDPluginWarp_SRCS += NDPluginWarp.cpp
+NDPluginSSCPimega_SRCS += NDPluginSSCPimega.cpp
 
 # Finally link to the EPICS Base libraries
-NDPluginWarp_LIBS += $(EPICS_BASE_IOC_LIBS)
+NDPluginSSCPimega_LIBS += $(EPICS_BASE_IOC_LIBS)
 
 #===========================
 
