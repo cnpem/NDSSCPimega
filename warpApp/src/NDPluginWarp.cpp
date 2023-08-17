@@ -38,57 +38,13 @@ NDPluginWarp::NDPluginWarp(const char *portName, int queueSize, int blockingCall
 {
     lastinfo.nElements = (size_t)-1; // spoil
 
-    createParam(NDWarpRunTimeString, asynParamFloat64, &NDWarpRunTime);
-    createParam(NDWarpModeString, asynParamInt32, &NDWarpMode);
-    createParam(NDWarpOutputString, asynParamInt32, &NDWarpOutput);
-
-    setIntegerParam(NDWarpMode, 0); // nearest neighbor
-
-    createParam(NDWarpAngleString, asynParamFloat64, &NDWarpAngle);
-    createParam(NDWarpFactorXString, asynParamFloat64, &NDWarpFactorX);
-    createParam(NDWarpFactorYString, asynParamFloat64, &NDWarpFactorY);
-    createParam(NDWarpCenterXString, asynParamInt32, &NDWarpCenterX);
-    createParam(NDWarpCenterYString, asynParamInt32, &NDWarpCenterY);
-
     setStringParam(NDPluginDriverPluginType, "NDPluginWarp");
 
-    setDoubleParam(NDWarpFactorX, 0.0); // initialize w/ no-op
-    setDoubleParam(NDWarpFactorY, 0.0);
-    setDoubleParam(NDWarpAngle, 0.0);
-    setIntegerParam(NDWarpCenterX, 0);
-    setIntegerParam(NDWarpCenterY, 0);
 }
 
 NDPluginWarp::~NDPluginWarp() {
     assert(false); // never called (asyn ports can't be destory'd)
 }
-
-namespace {
-template<typename T>
-void warpit(NDArray *atemp,
-            NDArray *output,
-            const NDPluginWarp::Sample *S,
-            size_t nElements,
-            unsigned samp_per_pixel)
-{
-    const T * const  I = (const T*)atemp->pData;
-    T       *        O = (T*)output->pData,
-            * const OE = O+nElements;
-
-    for(; O<OE; O++) {
-        double val = 0.0;
-        bool valid = true;
-        for(unsigned j=0; j<samp_per_pixel; j++, S++) {
-            valid &= S->valid;
-            if(S->valid)
-                val += S->weight * I[S->index];
-        }
-        if(!valid) val = 0.0;
-        *O = (T)val;
-    }
-
-}
-} // namespace
 
 void
 NDPluginWarp::processCallbacks(NDArray *pArray)
