@@ -15,8 +15,6 @@
 
 #include "NDPluginDriver.h"
 
-#include "ndutil.h"
-
 /* Param definitions */
 #define NDWarpRunTimeString    "WARP_RUN_TIME"
 #define NDWarpModeString       "WARP_INTERP_MODE"
