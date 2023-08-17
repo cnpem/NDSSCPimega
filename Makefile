@@ -4,7 +4,7 @@ include $(TOP)/configure/CONFIG
 
 # Directories to build, any order
 DIRS += configure
-DIRS += warpApp
+DIRS += SSCApp
 DIRS += $(wildcard iocBoot)
 
 # The build order is controlled by these dependency rules:
