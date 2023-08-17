@@ -1,0 +1,10 @@
+
+include "NDPluginBase.template"
+
+record(ai, "$(P)$(R)Example") {
+    field(DTYP, "asynFloat64")
+    field(INP , "@asyn($(PORT),0)WARP_RUN_TIME")
+    field(SCAN, "I/O Intr")
+    field(EGU , "s")
+    field(PREC, "6")
+}
