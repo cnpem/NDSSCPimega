@@ -16,7 +16,7 @@
 
 #include <NDPluginWarp.h>
 
-NDPluginWarp::NDPluginWarp(const char *portName, int queueSize, int blockingCallbacks,
+NDPluginSSCPimega::NDPluginSSCPimega(const char *portName, int queueSize, int blockingCallbacks,
              const char *NDArrayPort, int NDArrayAddr,
              int maxBuffers, size_t maxMemory,
              int priority, int stackSize)
@@ -38,16 +38,16 @@ NDPluginWarp::NDPluginWarp(const char *portName, int queueSize, int blockingCall
 {
     lastinfo.nElements = (size_t)-1; // spoil
 
-    setStringParam(NDPluginDriverPluginType, "NDPluginWarp");
+    setStringParam(NDPluginDriverPluginType, "NDPluginSSCPimega");
 
 }
 
-NDPluginWarp::~NDPluginWarp() {
+NDPluginSSCPimega::~NDPluginSSCPimega() {
     assert(false); // never called (asyn ports can't be destory'd)
 }
 
 void
-NDPluginWarp::processCallbacks(NDArray *pArray)
+NDPluginSSCPimega::processCallbacks(NDArray *pArray)
 {
     // pArray is borrowed reference.  Caller will release()
 
@@ -93,12 +93,12 @@ NDPluginWarp::processCallbacks(NDArray *pArray)
 
 }
 
-asynStatus NDPluginWarp::writeFloat64(asynUser *pasynUser, epicsFloat64 value)
+asynStatus NDPluginSSCPimega::writeFloat64(asynUser *pasynUser, epicsFloat64 value)
 {
     asynStatus ret;
     int function = pasynUser->reason;
 
-    if(function<FIRST_NDPLUGIN_WARP_PARAM)
+    if(function<FIRST_NDPLUGIN_SSC_PIMEGA_PARAM)
         return NDPluginDriver::writeFloat64(pasynUser, value);
 
     int addr = 0;
@@ -106,32 +106,17 @@ asynStatus NDPluginWarp::writeFloat64(asynUser *pasynUser, epicsFloat64 value)
 
     if(!ret) ret = setDoubleParam(addr, function, value);
 
-    try {
-        if(ret==asynSuccess) {
-            lastinfo.nElements = (size_t)-1; // spoil
-        }
-    }catch(std::exception& e) {
-        ret = asynError;
-        epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
-                      "%s:: status=%d, addr=%d function=%d, value=%g : %s",
-                      __PRETTY_FUNCTION__, ret, addr, function, value, e.what());
-
-        asynPrint(pasynUser, ASYN_TRACE_ERROR,
-                  "%s : Unhandled exception\n",
-                  pasynUser->errorMessage);
-    }
-
     (void)callParamCallbacks(addr, addr);
 
     return ret;
 }
 
-asynStatus NDPluginWarp::writeInt32(asynUser *pasynUser, epicsInt32 value)
+asynStatus NDPluginSSCPimega::writeInt32(asynUser *pasynUser, epicsInt32 value)
 {
     asynStatus ret;
     int function = pasynUser->reason;
 
-    if(function<FIRST_NDPLUGIN_WARP_PARAM)
+    if(function<FIRST_NDPLUGIN_SSC_PIMEGA_PARAM)
         return NDPluginDriver::writeInt32(pasynUser, value);
 
     int addr = 0;
@@ -139,31 +124,16 @@ asynStatus NDPluginWarp::writeInt32(asynUser *pasynUser, epicsInt32 value)
 
     if(!ret) ret = setIntegerParam(addr, function, value);
 
-    try {
-        if(ret==asynSuccess) {
-            lastinfo.nElements = (size_t)-1; // spoil
-        }
-    }catch(std::exception& e) {
-        ret = asynError;
-        epicsSnprintf(pasynUser->errorMessage, pasynUser->errorMessageSize,
-                      "%s:: status=%d, addr=%d function=%d, value=%d : %s",
-                      __PRETTY_FUNCTION__, ret, addr, function, value, e.what());
-
-        asynPrint(pasynUser, ASYN_TRACE_ERROR,
-                  "%s : Unhandled exception\n",
-                  pasynUser->errorMessage);
-    }
-
     (void)callParamCallbacks(addr, addr);
 
     return ret;
 }
 
-extern "C" int NDWarpConfigure(const char *portName, int queueSize, int blockingCallbacks,
+extern "C" int NDSSCPimegaConfigure(const char *portName, int queueSize, int blockingCallbacks,
                                 const char *NDArrayPort, int NDArrayAddr,
                                 int maxBuffers, size_t maxMemory)
 {
-    return (new NDPluginWarp(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr,
+    return (new NDPluginSSCPimega(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr,
                      maxBuffers, maxMemory, 0, 2000000))->start();
 }
 
@@ -182,19 +152,19 @@ static const iocshArg * const initArgs[] = {&initArg0,
                                             &initArg4,
                                             &initArg5,
                                             &initArg6};
-static const iocshFuncDef initFuncDef = {"NDWarpConfigure",7,initArgs};
+static const iocshFuncDef initFuncDef = {"NDSSCPimegaConfigure",7,initArgs};
 static void initCallFunc(const iocshArgBuf *args)
 {
-    NDWarpConfigure(args[0].sval, args[1].ival, args[2].ival,
+    NDSSCPimegaConfigure(args[0].sval, args[1].ival, args[2].ival,
                      args[3].sval, args[4].ival, args[5].ival,
                      args[6].ival);
 }
 
-static void NDWarpRegister(void)
+static void NDSSCAPimegaRegister(void)
 {
     iocshRegister(&initFuncDef,initCallFunc);
 }
 
 extern "C" {
-epicsExportRegistrar(NDWarpRegister);
+epicsExportRegistrar(NDSSCAPimegaRegister);
 }

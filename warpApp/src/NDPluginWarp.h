@@ -1,11 +1,12 @@
-/*
- * This software is Copyright by the Board of Trustees of Michigan
- * State University (c) Copyright 2016.
+/*NDPLUGINSSCPIMEGA_H
  *
- * Author: Michael Davidsaver <mdavidsaver@gmail.com>
+ * Authors: Marco A. B Montevechi Filho, Henrique F. Simoes, Eduardo X. S. Miqueles
+ *
  */
-#ifndef NDPLUGINWARP_H
-#define NDPLUGINWARP_H
+#ifndef NDPLUGINSSCPIMEGA_H
+#define NDPLUGINSSCPIMEGA_H
+
+#define FIRST_NDPLUGIN_SSC_PIMEGA_PARAM 10000000
 
 #include <memory>
 #include <vector>
@@ -17,13 +18,13 @@
 
 /* Param definitions */
 
-class epicsShareClass NDPluginWarp : public NDPluginDriver {
+class epicsShareClass NDPluginSSCPimega : public NDPluginDriver {
 public:
-    NDPluginWarp(const char *portName, int queueSize, int blockingCallbacks,
+    NDPluginSSCPimega(const char *portName, int queueSize, int blockingCallbacks,
                  const char *NDArrayPort, int NDArrayAddr,
                  int maxBuffers, size_t maxMemory,
                  int priority, int stackSize);
-    virtual ~NDPluginWarp();
+    virtual ~NDPluginSSCPimega();
 
     virtual void processCallbacks(NDArray *pArray);
     virtual asynStatus writeFloat64(asynUser *pasynUser, epicsFloat64 value);
@@ -31,8 +32,6 @@ public:
 
     NDArrayInfo lastinfo;
 
-    int NDWarpRunTime;
-
 };
 
-#endif // NDPLUGINWARP_H
+#endif // NDPLUGINSSCPIMEGA_H
