@@ -1,10 +1,19 @@
 
 include "NDPluginBase.template"
 
-record(ai, "$(P)$(R)Example") {
-    field(DTYP, "asynFloat64")
-    field(INP , "@asyn($(PORT),0)WARP_RUN_TIME")
+record(longin, "$(P)$(R)BlockSize"){
+    field(DESC, "Number of frames in the block")
+    field(DTYP, "asynInt32")
     field(SCAN, "I/O Intr")
-    field(EGU , "s")
-    field(PREC, "6")
+    field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))BLOCK_SIZE")
+    field(PINI, "YES")
+}
+
+record(mbbi, "$(P)$(R)PimegaModel") {
+    field(DESC, "Pimega Model")
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))PIMEGA_MODEL")
+    field(SCAN, "I/O Intr")
+    field(ZRVL, "1536")    field(ZRST, "135D")
+    field(ONVL, "3072")    field(ONST, "540D")
 }
