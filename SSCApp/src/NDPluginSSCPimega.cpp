@@ -16,6 +16,14 @@
 
 #include <NDPluginSSCPimega.h>
 
+#include <ssc_pimega_backend.h>
+
+asynStatus NDPluginSSCPimega::loadMatrix(){
+
+;
+
+}
+
 NDPluginSSCPimega::NDPluginSSCPimega(const char *portName, int queueSize, int blockingCallbacks,
              const char *NDArrayPort, int NDArrayAddr,
              int maxBuffers, size_t maxMemory,
@@ -38,7 +46,12 @@ NDPluginSSCPimega::NDPluginSSCPimega(const char *portName, int queueSize, int bl
 {
     lastinfo.nElements = (size_t)-1; // spoil
 
+    createParam(SSCPimegaBlockSizeString, asynParamInt32, &blockSize);
+    createParam(SSCPimegaModelString,     asynParamInt32, &pimegaModel);
+
     setStringParam(NDPluginDriverPluginType, "NDPluginSSCPimega");
+
+    setIntegerParam(blockSize, 1);
 
 }
 
@@ -118,6 +131,13 @@ asynStatus NDPluginSSCPimega::writeInt32(asynUser *pasynUser, epicsInt32 value)
 
     if(function<FIRST_NDPLUGIN_SSC_PIMEGA_PARAM)
         return NDPluginDriver::writeInt32(pasynUser, value);
+
+    printf("FUNCTION CHAR %s\n", function);
+    printf("FUNCTION INTEGER %d\n",function);
+    printf("pimegaModel %d", function);
+    if(function==pimegaModel){
+        printf("aaa\n");
+    }
 
     int addr = 0;
     ret = getAddress(pasynUser, &addr);

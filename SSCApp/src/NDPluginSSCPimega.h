@@ -6,8 +6,6 @@
 #ifndef NDPLUGINSSCPIMEGA_H
 #define NDPLUGINSSCPIMEGA_H
 
-#define FIRST_NDPLUGIN_SSC_PIMEGA_PARAM 10000000
-
 #include <memory>
 #include <vector>
 
@@ -30,8 +28,18 @@ public:
     virtual asynStatus writeFloat64(asynUser *pasynUser, epicsFloat64 value);
     virtual asynStatus writeInt32(asynUser *pasynUser, epicsInt32 value);
 
+    asynStatus loadMatrix();
     NDArrayInfo lastinfo;
 
+protected:
+
+    int blockSize;
+    #define FIRST_NDPLUGIN_SSC_PIMEGA_PARAM blockSize
+    int pimegaModel;
+
 };
+
+#define SSCPimegaBlockSizeString      "BLOCK_SIZE"
+#define SSCPimegaModelString          "PIMEGA_MODEL"
 
 #endif // NDPLUGINSSCPIMEGA_H
