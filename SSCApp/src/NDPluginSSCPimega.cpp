@@ -132,9 +132,6 @@ asynStatus NDPluginSSCPimega::writeInt32(asynUser *pasynUser, epicsInt32 value)
     if(function<FIRST_NDPLUGIN_SSC_PIMEGA_PARAM)
         return NDPluginDriver::writeInt32(pasynUser, value);
 
-    printf("FUNCTION CHAR %s\n", function);
-    printf("FUNCTION INTEGER %d\n",function);
-    printf("pimegaModel %d", function);
     if(function==pimegaModel){
         printf("aaa\n");
     }
