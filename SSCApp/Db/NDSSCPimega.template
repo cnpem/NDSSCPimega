@@ -12,8 +12,8 @@ record(mbbo, "$(P)$(R)PimegaModel") {
     field(DESC, "Pimega Model")
     field(DTYP, "asynInt32")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PIMEGA_MODEL")
-    field(ZRVL, "1536")    field(ZRST, "135D")
-    field(ONVL, "3072")    field(ONST, "540D")
+    field(ZRST, "540D")
+    field(ONST, "135D")
 }
 
 record(bo, "$(P)$(R)LoadMatrix") {
