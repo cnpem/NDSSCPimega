@@ -16,7 +16,9 @@
 
 #include <NDPluginSSCPimega.h>
 
+extern "C" {
 #include <ssc_pimega_backend.h>
+}
 
 static const char *driverName = "NDSSCPimega";
 

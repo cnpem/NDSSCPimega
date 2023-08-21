@@ -17,6 +17,8 @@ DBD += NDPluginSSCPimega.dbd
 # Add all the support libraries needed by this IOC
 NDPluginSSCPimega_LIBS += NDPlugin ADBase asyn xml2
 
+USR_SYS_LIBS += sscPimegaBackend
+
 NDPluginSSCPimega_SRCS += NDPluginSSCPimega.cpp
 
 # Finally link to the EPICS Base libraries
