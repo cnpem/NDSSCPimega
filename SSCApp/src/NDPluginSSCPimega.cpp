@@ -18,9 +18,20 @@
 
 #include <ssc_pimega_backend.h>
 
+static const char *driverName = "NDSSCPimega";
+
 asynStatus NDPluginSSCPimega::loadMatrix(){
 
-;
+    getIntegerParam(blockSize, &blockSizeVal);
+    getIntegerParam(pimegaModel, &pimegaModelVal);
+
+    printf("BLOCKSIZE: %d\n",blockSizeVal);
+    printf("MODEL: %d\n",pimegaModelVal);
+
+    ssc_pimega_backend_plan workspace;
+    ssc_pimega_backend_create_plan( &workspace, blockSizeVal, SSC_PIMEGA_540D );
+
+    return asynSuccess;
 
 }
 
@@ -36,8 +47,8 @@ NDPluginSSCPimega::NDPluginSSCPimega(const char *portName, int queueSize, int bl
                      1, // maxAddr
                      maxBuffers,
                      maxMemory,
-                     asynInt32ArrayMask | asynFloat64ArrayMask | asynGenericPointerMask,
-                     asynInt32ArrayMask | asynFloat64ArrayMask | asynGenericPointerMask,
+                     asynInt32ArrayMask | asynFloat64ArrayMask | asynOctetMask | asynGenericPointerMask,
+                     asynInt32ArrayMask | asynFloat64ArrayMask | asynOctetMask | asynGenericPointerMask,
                      0, // asynFlags
                      1, // autoConnect
                      priority,
@@ -46,12 +57,17 @@ NDPluginSSCPimega::NDPluginSSCPimega(const char *portName, int queueSize, int bl
 {
     lastinfo.nElements = (size_t)-1; // spoil
 
-    createParam(SSCPimegaBlockSizeString, asynParamInt32, &blockSize);
-    createParam(SSCPimegaModelString,     asynParamInt32, &pimegaModel);
+    createParam(SSCPimegaBlockSizeString,  asynParamInt32, &blockSize);
+    createParam(SSCPimegaModelString,      asynParamInt32, &pimegaModel);
+    createParam(SSCPimegaLoadMatrixString, asynParamInt32, &loadMatrixes);
+    createParam(SSCPimegaFilePath,         asynParamOctet, &matrixFilePath);
 
     setStringParam(NDPluginDriverPluginType, "NDPluginSSCPimega");
+    setStringParam(matrixFilePath,           "/tmp/");
 
     setIntegerParam(blockSize, 1);
+
+    callParamCallbacks();
 
 }
 
@@ -132,12 +148,14 @@ asynStatus NDPluginSSCPimega::writeInt32(asynUser *pasynUser, epicsInt32 value)
     if(function<FIRST_NDPLUGIN_SSC_PIMEGA_PARAM)
         return NDPluginDriver::writeInt32(pasynUser, value);
 
-    if(function==pimegaModel){
-        printf("aaa\n");
-    }
-
     int addr = 0;
     ret = getAddress(pasynUser, &addr);
+
+    if(function==loadMatrixes){
+        //Should have the filePath configured before implementing this...
+        getStringParam(matrixFilePath,256,matrixFileName);
+        loadMatrix();
+    }
 
     if(!ret) ret = setIntegerParam(addr, function, value);
 

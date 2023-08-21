@@ -34,12 +34,21 @@ public:
 protected:
 
     int blockSize;
+    int blockSizeVal;
     #define FIRST_NDPLUGIN_SSC_PIMEGA_PARAM blockSize
     int pimegaModel;
+    int pimegaModelVal;
+
+    int loadMatrixes;
+    int matrixFilePath;
+
+    char matrixFileName[256];
 
 };
 
 #define SSCPimegaBlockSizeString      "BLOCK_SIZE"
 #define SSCPimegaModelString          "PIMEGA_MODEL"
+#define SSCPimegaLoadMatrixString     "LOAD_MATRIX"
+#define SSCPimegaFilePath             "MATRIX_FILE_PATH"
 
 #endif // NDPLUGINSSCPIMEGA_H
