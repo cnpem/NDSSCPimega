@@ -15,3 +15,22 @@ record(mbbo, "$(P)$(R)PimegaModel") {
     field(ZRVL, "1536")    field(ZRST, "135D")
     field(ONVL, "3072")    field(ONST, "540D")
 }
+
+record(bo, "$(P)$(R)LoadMatrix") {
+    field(DESC, "Tell plugin to load restoration matrixes")
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))LOAD_MATRIX")
+    field(ONAM, "Load")
+    field(ZNAM, "0")
+    field(HIGH, "0.1")
+}
+
+record(waveform, "$(P)$(R)FilePath")
+{
+    field(PINI, "YES")
+    field(DTYP, "asynOctetWrite")
+    field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))MATRIX_FILE_PATH")
+    field(FTVL, "CHAR")
+    field(NELM, "256")
+    info(autosaveFields, "VAL")
+}
