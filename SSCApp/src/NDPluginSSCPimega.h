@@ -44,6 +44,9 @@ protected:
     int pimegaModel;
     int pimegaModelVal;
 
+    int validWorkspaceVal{0};
+    int validWorspace;
+
     int loadMatrixes;
     int matrixFilePath;
 
@@ -55,5 +58,6 @@ protected:
 #define SSCPimegaModelString          "PIMEGA_MODEL"
 #define SSCPimegaLoadMatrixString     "LOAD_MATRIX"
 #define SSCPimegaFilePath             "MATRIX_FILE_PATH"
+#define SSCPimegaValidWorkspace       "VALID_WORKSPACE"
 
 #endif // NDPLUGINSSCPIMEGA_H

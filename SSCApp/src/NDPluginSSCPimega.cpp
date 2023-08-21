@@ -69,6 +69,9 @@ asynStatus NDPluginSSCPimega::loadMatrix(int load){
 
     ssc_pimega_backend_create_plan( &workspace, blockSizeVal, pimegaModelVal );
     ssc_pimega_backend_set_plan( &workspace, ix, iy);
+    
+    setIntegerParam(validWorspace, 1);
+    callParamCallbacks();
 
     return asynSuccess;
 
@@ -99,6 +102,7 @@ NDPluginSSCPimega::NDPluginSSCPimega(const char *portName, int queueSize, int bl
     createParam(SSCPimegaBlockSizeString,  asynParamInt32, &blockSize);
     createParam(SSCPimegaModelString,      asynParamInt32, &pimegaModel);
     createParam(SSCPimegaLoadMatrixString, asynParamInt32, &loadMatrixes);
+    createParam(SSCPimegaValidWorkspace,   asynParamInt32, &validWorspace);
     createParam(SSCPimegaFilePath,         asynParamOctet, &matrixFilePath);
 
     setStringParam(NDPluginDriverPluginType, "NDPluginSSCPimega");
