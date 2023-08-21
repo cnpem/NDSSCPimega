@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <limits>
 
+#include <fstream>
+
 #include <string.h>
 
 #include <epicsMath.h>
@@ -18,16 +20,55 @@
 
 static const char *driverName = "NDSSCPimega";
 
-asynStatus NDPluginSSCPimega::loadMatrix(){
+asynStatus NDPluginSSCPimega::loadMatrix(int load){
 
-    getIntegerParam(blockSize, &blockSizeVal);
-    getIntegerParam(pimegaModel, &pimegaModelVal);
+    if(load!=1){ //Only process on record rising from 0 to 1
+        return asynSuccess;
+    }
 
-    printf("BLOCKSIZE: %d\n",blockSizeVal);
-    printf("MODEL: %d\n",pimegaModelVal);
+    getIntegerParam(blockSize,           &blockSizeVal);
+    getIntegerParam(pimegaModel,         &pimegaModelVal);
+    getStringParam(matrixFilePath,  256, matrixFileName);
 
-    ssc_pimega_backend_plan workspace;
-    ssc_pimega_backend_create_plan( &workspace, blockSizeVal, SSC_PIMEGA_540D );
+    char xFilePath[264];
+    char yFilePath[264];
+
+    strcpy(xFilePath, matrixFileName);
+    strcpy(yFilePath, matrixFileName);
+
+    strcat(xFilePath,"/x540D.b"); //hardcoded for now. Should be a PV.
+    strcat(yFilePath,"/y540D.b"); 
+
+    std::ifstream infilex(xFilePath);
+    std::ifstream infiley(yFilePath);
+
+    if(!bool(infilex.good()) || !bool(infiley.good())){
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                  "%s:: Matrix File does not exist.\n",
+                  this->portName);
+        return asynError;
+    };
+
+    int *ix, *iy;
+
+    iy = (int *)malloc( 3072 * 3072 * sizeof(int) );
+    ix = (int *)malloc( 3072 * 3072 * sizeof(int) );
+
+    FILE *fpx = fopen( xFilePath, "rb+");
+    FILE *fpy = fopen( yFilePath, "rb+");
+
+    fread(ix, sizeof(int), 3072 * 3072, fpx);
+    fread(iy, sizeof(int), 3072 * 3072, fpy);
+
+    if (fpx == NULL || fpy == NULL){
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                  "%s:: Cant open matrix files.\n",
+                  this->portName);
+        return asynError;
+    }
+
+    ssc_pimega_backend_create_plan( &workspace, blockSizeVal, pimegaModelVal );
+    ssc_pimega_backend_set_plan( &workspace, ix, iy);
 
     return asynSuccess;
 
@@ -152,7 +193,7 @@ asynStatus NDPluginSSCPimega::writeInt32(asynUser *pasynUser, epicsInt32 value)
     if(function==loadMatrixes){
         //Should have the filePath configured before implementing this...
         getStringParam(matrixFilePath,256,matrixFileName);
-        loadMatrix();
+        loadMatrix(value);
     }
 
     if(!ret) ret = setIntegerParam(addr, function, value);

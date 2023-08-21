@@ -32,8 +32,9 @@ public:
     virtual asynStatus writeFloat64(asynUser *pasynUser, epicsFloat64 value);
     virtual asynStatus writeInt32(asynUser *pasynUser, epicsInt32 value);
 
-    asynStatus loadMatrix();
+    asynStatus loadMatrix(int load);
     NDArrayInfo lastinfo;
+    ssc_pimega_backend_plan workspace;
 
 protected:
 
