@@ -14,6 +14,10 @@
 
 #include "NDPluginDriver.h"
 
+extern "C" {
+#include <ssc_pimega_backend.h>
+}
+
 /* Param definitions */
 
 class epicsShareClass NDPluginSSCPimega : public NDPluginDriver {
