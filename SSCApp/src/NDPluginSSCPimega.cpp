@@ -2,7 +2,7 @@
  * This software is Copyright by the Board of Trustees of Michigan
  * State University (c) Copyright 2016.
  *
- * Author: Michael Davidsaver <mdavidsaver@gmail.com>
+ * Authors: Marco A. B Montevechi Filho, Henrique F. Simoes, Eduardo X. S. Miqueles
  */
 #include <algorithm>
 #include <limits>
