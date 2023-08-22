@@ -35,10 +35,11 @@ record(waveform, "$(P)$(R)FilePath")
     info(autosaveFields, "VAL")
 }
 
-record(bo, "$(P)$(R)ValidWorspace") {
+record(bi, "$(P)$(R)ValidWorspace") {
     field(DESC, "Is there a valid worspace? 1=Yes.")
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))VALID_WORKSPACE")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))VALID_WORKSPACE")
+    field(SCAN, "I/O Intr")
     field(ONAM, "1")
     field(ZNAM, "0")
 }

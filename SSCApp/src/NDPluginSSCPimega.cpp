@@ -71,7 +71,7 @@ asynStatus NDPluginSSCPimega::loadMatrix(int load){
     ssc_pimega_backend_set_plan( &workspace, ix, iy);
     
     setIntegerParam(validWorspace, 1);
-    callParamCallbacks();
+    callParamCallbacks(0);
 
     return asynSuccess;
 
