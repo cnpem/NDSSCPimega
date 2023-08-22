@@ -45,7 +45,7 @@ protected:
     int pimegaModelVal;
 
     int validWorkspaceVal{0};
-    int validWorspace;
+    int validWorkspace;
 
     int loadMatrixes;
     int matrixFilePath;
