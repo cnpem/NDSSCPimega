@@ -121,11 +121,13 @@ NDPluginSSCPimega::~NDPluginSSCPimega() {
 void
 NDPluginSSCPimega::processCallbacks(NDArray *pArray)
 {
-    // pArray is borrowed reference.  Caller will release()
+
 
     NDPluginDriver::beginProcessCallbacks(pArray);
-    size_t dims[2] = {3072, 3072};
+    
+    size_t dims[2] = {pArray->dims[0].size, pArray->dims[1].size};
 
+    // pArray is borrowed reference.  Caller will release()
     NDArrayInfo info;
     NDArray *pOutput;
     (void)pArray->getInfo(&info);
