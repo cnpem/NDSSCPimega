@@ -28,6 +28,7 @@ asynStatus NDPluginSSCPimega::loadMatrix(int load){
 
     getIntegerParam(blockSize,           &blockSizeVal);
     getIntegerParam(pimegaModel,         &pimegaModelVal);
+    getIntegerParam(validWorkspace,      &validWorkspaceVal);
     getStringParam(matrixFilePath,  256, matrixFileName);
 
     char xFilePath[264];
@@ -67,11 +68,20 @@ asynStatus NDPluginSSCPimega::loadMatrix(int load){
         return asynError;
     }
 
+    if (validWorkspaceVal){
+        ssc_pimega_backend_free_plan( &workspace );
+    }
+
     ssc_pimega_backend_create_plan( &workspace, blockSizeVal, pimegaModelVal );
     ssc_pimega_backend_set_plan( &workspace, ix, iy);
 
     setIntegerParam(validWorkspace, 1);
     callParamCallbacks(0);
+
+    fclose( fpx );
+    fclose( fpy );
+    free(iy);
+    free(ix);
 
     return asynSuccess;
 
