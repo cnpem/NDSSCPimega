@@ -69,7 +69,7 @@ asynStatus NDPluginSSCPimega::loadMatrix(int load){
 
     ssc_pimega_backend_create_plan( &workspace, blockSizeVal, pimegaModelVal );
     ssc_pimega_backend_set_plan( &workspace, ix, iy);
-    
+
     setIntegerParam(validWorkspace, 1);
     callParamCallbacks(0);
 
@@ -171,9 +171,9 @@ NDPluginSSCPimega::processCallbacks(NDArray *pArray)
     free(intermediateIn);
     //free(intermediateOut);
 
-    NDPluginDriver::endProcessCallbacks(pOutput, true, true);
+    NDPluginDriver::endProcessCallbacks(pOutput, false, true);
 
-    pOutput->release();
+    //pOutput->release();
 
 }
 
