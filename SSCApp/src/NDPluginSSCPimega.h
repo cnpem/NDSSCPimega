@@ -52,6 +52,8 @@ protected:
 
     char matrixFileName[256];
 
+    int modelPixels[2] = {3072, 1536};
+
 };
 
 #define SSCPimegaBlockSizeString      "BLOCK_SIZE"

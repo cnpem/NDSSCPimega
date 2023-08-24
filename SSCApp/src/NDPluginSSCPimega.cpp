@@ -122,16 +122,25 @@ void
 NDPluginSSCPimega::processCallbacks(NDArray *pArray)
 {
 
-
-    NDPluginDriver::beginProcessCallbacks(pArray);
-    
-    size_t dims[2] = {pArray->dims[0].size, pArray->dims[1].size};
-
     // pArray is borrowed reference.  Caller will release()
     NDArrayInfo info;
     NDArray *pOutput;
     NDArray *intermediateIn;
+
+    NDPluginDriver::beginProcessCallbacks(pArray);
+
+    getIntegerParam(pimegaModel,         &pimegaModelVal);
+    
+    size_t dims[2] = {pArray->dims[0].size, pArray->dims[1].size};
+
     (void)pArray->getInfo(&info);
+
+    if(modelPixels[pimegaModelVal]!=dims[0]){
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+          "%s:: Array size is not coherent with PiMega model.\n",
+          this->portName);
+          return;
+    }
 
     if(pArray->ndims!=2 || info.xSize==0 || info.ySize==0) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
