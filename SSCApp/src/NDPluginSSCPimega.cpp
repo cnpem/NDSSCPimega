@@ -37,7 +37,7 @@ asynStatus NDPluginSSCPimega::loadMatrix(int load){
     strcpy(yFilePath, matrixFileName);
 
     strcat(xFilePath,"/x540D.b"); //hardcoded for now. Should be a PV.
-    strcat(yFilePath,"/y540D.b"); 
+    strcat(yFilePath,"/y540D.b");
 
     std::ifstream infilex(xFilePath);
     std::ifstream infiley(yFilePath);
@@ -124,10 +124,13 @@ NDPluginSSCPimega::processCallbacks(NDArray *pArray)
     // pArray is borrowed reference.  Caller will release()
 
     NDPluginDriver::beginProcessCallbacks(pArray);
+    size_t dims[2] = {3072, 3072};
 
     NDArrayInfo info;
     NDArray *pOutput;
-    //(void)pArray->getInfo(&info);
+    (void)pArray->getInfo(&info);
+    float * intermediateIn = (float *)malloc( pArray->dataSize );
+    float * intermediateOut = (float *)malloc( pArray->dataSize );
 
     if(pArray->ndims!=2 || info.xSize==0 || info.ySize==0) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
@@ -153,11 +156,20 @@ NDPluginSSCPimega::processCallbacks(NDArray *pArray)
     }
     asynPrint(pasynUserSelf, ASYN_TRACE_FLOW, "%s: %s ndarray=%p\n", this->portName, __PRETTY_FUNCTION__, pArray);
 
-    pOutput = this->pNDArrayPool->copy(pArray, NULL, true, true, true);
+    memcpy(intermediateIn, pArray->pData, pArray->dataSize);
+
+    ssc_pimega_backend_restoration( intermediateOut, intermediateIn, &workspace );
+    //pOutput = this->pNDArrayPool->alloc(pArray->ndims, dims, NDFloat32, pArray->dataSize, intermediateOut);
+    //pOutput = this->pNDArrayPool->alloc(2, dims, NDFloat32, pArray->dataSize, intermediateOut);
+    pOutput = this->pNDArrayPool->alloc(2, dims, NDFloat32, pArray->dataSize, intermediateOut);
+
+    //pOutput = this->pNDArrayPool->copy(pArray, NULL, true, true, true);
     
-    (void)pOutput->getInfo(&info);
-    printf("%lu\n",info.nElements);
-    memset(pOutput->pData, 1, 4718592);
+    //printf("%lu\n",info.nElements);
+    //memset(pOutput->pData, 1000, 4718592);
+
+    free(intermediateIn);
+    //free(intermediateOut);
 
     NDPluginDriver::endProcessCallbacks(pOutput, true, true);
 
