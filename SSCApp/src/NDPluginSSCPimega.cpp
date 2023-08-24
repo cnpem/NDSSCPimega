@@ -130,9 +130,8 @@ NDPluginSSCPimega::processCallbacks(NDArray *pArray)
     // pArray is borrowed reference.  Caller will release()
     NDArrayInfo info;
     NDArray *pOutput;
+    NDArray *intermediateIn;
     (void)pArray->getInfo(&info);
-    float * intermediateIn = (float *)malloc( pArray->dataSize );
-    float * intermediateOut = (float *)malloc( pArray->dataSize );
 
     if(pArray->ndims!=2 || info.xSize==0 || info.ySize==0) {
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
@@ -158,24 +157,21 @@ NDPluginSSCPimega::processCallbacks(NDArray *pArray)
     }
     asynPrint(pasynUserSelf, ASYN_TRACE_FLOW, "%s: %s ndarray=%p\n", this->portName, __PRETTY_FUNCTION__, pArray);
 
-    memcpy(intermediateIn, pArray->pData, pArray->dataSize);
+    pOutput = this->pNDArrayPool->alloc(2, dims, NDFloat32, 0, NULL);
 
-    ssc_pimega_backend_restoration( intermediateOut, intermediateIn, &workspace );
-    //pOutput = this->pNDArrayPool->alloc(pArray->ndims, dims, NDFloat32, pArray->dataSize, intermediateOut);
-    //pOutput = this->pNDArrayPool->alloc(2, dims, NDFloat32, pArray->dataSize, intermediateOut);
-    pOutput = this->pNDArrayPool->alloc(2, dims, NDFloat32, pArray->dataSize, intermediateOut);
+    if (pArray->dataType != NDFloat32) {
+        this->pNDArrayPool->convert(pArray, &intermediateIn, NDFloat32);
+    }else{
+        intermediateIn = pArray;
+    }
 
-    //pOutput = this->pNDArrayPool->copy(pArray, NULL, true, true, true);
-    
-    //printf("%lu\n",info.nElements);
-    //memset(pOutput->pData, 1000, 4718592);
-
-    free(intermediateIn);
-    //free(intermediateOut);
+    ssc_pimega_backend_restoration( (float *)pOutput->pData, (float *)intermediateIn->pData, &workspace );
 
     NDPluginDriver::endProcessCallbacks(pOutput, false, true);
 
-    //pOutput->release();
+    if (intermediateIn!=pArray){
+        intermediateIn->release();
+    }
 
 }
 
