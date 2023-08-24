@@ -51,14 +51,14 @@ asynStatus NDPluginSSCPimega::loadMatrix(int load){
 
     int *ix, *iy;
 
-    iy = (int *)malloc( 3072 * 3072 * sizeof(int) );
-    ix = (int *)malloc( 3072 * 3072 * sizeof(int) );
+    iy = (int *)malloc( modelPixels[pimegaModelVal] * modelPixels[pimegaModelVal] * sizeof(int) );
+    ix = (int *)malloc( modelPixels[pimegaModelVal] * modelPixels[pimegaModelVal] * sizeof(int) );
 
     FILE *fpx = fopen( xFilePath, "rb+");
     FILE *fpy = fopen( yFilePath, "rb+");
 
-    fread(ix, sizeof(int), 3072 * 3072, fpx);
-    fread(iy, sizeof(int), 3072 * 3072, fpy);
+    fread(ix, sizeof(int), modelPixels[pimegaModelVal] * modelPixels[pimegaModelVal], fpx);
+    fread(iy, sizeof(int), modelPixels[pimegaModelVal] * modelPixels[pimegaModelVal], fpy);
 
     if (fpx == NULL || fpy == NULL){
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
