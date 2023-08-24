@@ -27,8 +27,6 @@ SUPPORT=/usr/local/epics/synApps/support
 # required
 ADCORE=$(SUPPORT)/areaDetector-R3-7/ADCore
 ASYN=$(SUPPORT)/asyn-R4-36
-BUSY=$(SUPPORT)/busy-R1-7-2
-CALC=$(SUPPORT)/calc-R3-7-3
 
 ADSUPPORT=$(SUPPORT)/areaDetector-R3-7/ADSupport/
 XML2=$(ADSUPPORT)
