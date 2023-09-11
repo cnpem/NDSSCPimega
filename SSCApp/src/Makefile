@@ -15,7 +15,7 @@ DBD += NDPluginSSCPimega.dbd
 # headers are not considered public
 
 # Add all the support libraries needed by this IOC
-NDPluginSSCPimega_LIBS += NDPlugin ADBase asyn xml2
+NDPluginSSCPimega_LIBS += NDPlugin ADBase asyn
 
 USR_SYS_LIBS += sscPimegaBackend
 
