@@ -55,15 +55,22 @@ asynStatus NDPluginSSCPimega::loadMatrix(int load){
     iy = (int *)malloc( modelPixels[pimegaModelVal] * modelPixels[pimegaModelVal] * sizeof(int) );
     ix = (int *)malloc( modelPixels[pimegaModelVal] * modelPixels[pimegaModelVal] * sizeof(int) );
 
-    FILE *fpx = fopen( xFilePath, "rb+");
-    FILE *fpy = fopen( yFilePath, "rb+");
-
-    fread(ix, sizeof(int), modelPixels[pimegaModelVal] * modelPixels[pimegaModelVal], fpx);
-    fread(iy, sizeof(int), modelPixels[pimegaModelVal] * modelPixels[pimegaModelVal], fpy);
+    FILE *fpx = fopen( xFilePath, "rb");
+    FILE *fpy = fopen( yFilePath, "rb");
 
     if (fpx == NULL || fpy == NULL){
         asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
                   "%s:: Cant open matrix files.\n",
+                  this->portName);
+        return asynError;
+    }
+    
+    fread(ix, sizeof(int), modelPixels[pimegaModelVal] * modelPixels[pimegaModelVal], fpx);
+    fread(iy, sizeof(int), modelPixels[pimegaModelVal] * modelPixels[pimegaModelVal], fpy);
+
+    if ( ferror(ix) || ferror(iy) ){
+        asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                  "%s:: Cant read matrix files.\n",
                   this->portName);
         return asynError;
     }
